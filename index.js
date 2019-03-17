@@ -8,29 +8,68 @@ var prefix = "!q";
 var prefixmop = "!q";
 var timerhandle;
 
-//bot.once
+bot.once('ready', ()=>{
+  
+    timerhandle=setInterval(function(){
+    var dcurentdate = new Date();
+
+      //let myRole = message.guild.roles.get("495223447207542825");
+      if(dcurentdate.getHours() === setdate.getHours() && dcurentdate.getMinutes() === setdate.getMinutes()){
+        bot.channels.get("553317566932582410").send({embed: {
+          color: 3447003,
+          description: `Przypomnienie!!!!! `
+            //${myRole}
+        }});
+    }
+    
+    bot.channels.get("553317566932582410").send({embed: {
+      color: 3447003,
+      description: ` U ${setdate.getHours()}:${setdate.getMinutes()} O${dcurentdate.getHours()}:${dcurentdate.getMinutes()}  HT ${dcurentdate.getHours() === setdate.getHours()} MT ${dcurentdate.getMinutes() === setdate.getMinutes()} S ${dcurentdate.getSeconds()}`
+      
+    }});
+
+      
+  }, 10000)
+
+  if(setdate.getHours() === 23){
+    bot.channels.get("553317566932582410").send({embed: {
+      color: 3447003,
+      description: `Ustawiono przypomnienie na godzinę 00:${setdate.getMinutes()}`}});
+  }else{
+    bot.channels.get("553317566932582410").send({embed: {
+      color: 3447003,
+      description: `Ustawiono przypomnienie na godzinę ${setdate.getHours()+1}:${setdate.getMinutes()}`}}); 
+  }
+
+  
+});
+
+//bot chat
 bot.on('message', message => {
 
-  const readline = require('readline').createInterface({
-    input: process.stdin,
-    output: process.stdout
-  })
-  
-  readline.question(`What's your name?`, (name) => {
-    message.channel.send(name);
-    //console.log(`Hi ${name}!`)
-    readline.close()
-  })
+  if (message.content.startsWith('chat')) {
+
+    const readline = require('readline').createInterface({
+      input: process.stdin,
+      output: process.stdout
+    })
+    
+    readline.question(`What's your name?`, (name) => {
+      message.channel.send(name);
+      //console.log(`Hi ${name}!`)
+      readline.close()
+    })
+
+  }
 
   //var child_process = require('child_process');
   //child_process.exec("start cmd.exe /K cd /D C:/test");
   
 });
 
-
-
+//bot timerstrt
 bot.on('message', message => {
-  if (message.content.startsWith('tbtimer')) {
+  if (message.content.startsWith('tbtimer') && !message.content.startsWith('tbtimerstop')) {
 
         let command = message.content.substring(message.content.indexOf(" ") + 1, message.content.length);
         //message.channel.send('Command1 + ' + command );
@@ -66,26 +105,37 @@ bot.on('message', message => {
           message.reply('Nieprawidłowa ilość parametrów wpisz tbhelp po więcej informacji');
           return;
         }
+        clearInterval(timerhandle);
            
-            setInterval(function(){
-              var dcurentdate = new Date();
+        timerhandle=setInterval(function(){
+          var dcurentdate = new Date();
+      
+            //let myRole = message.guild.roles.get("495223447207542825");
+            if(dcurentdate.getHours() === setdate.getHours() && dcurentdate.getMinutes() === setdate.getMinutes()){
+              bot.channels.get("553317566932582410").send({embed: {
+                color: 3447003,
+                description: `Przypomnienie!!!!! `
+                  //${myRole}
+              }});
+          }
 
-                let myRole = message.guild.roles.get("495223447207542825");
-                if(dcurentdate.getHours() === setdate.getHours() && dcurentdate.getMinutes() === setdate.getMinutes()){
-                  bot.channels.get("495220836312285184").send({embed: {
-                    color: 3447003,
-                    description: `${myRole} Proszę o uzupełnienie Drt i Donat`
-                      //${myRole}
-                  }});
-              }
-                
-            }, 60000)
-            //message.reply(`H ${setdate.getHours()}`);
-            if(setdate.getHours() === 23){
-              message.reply(`Ustawiono przypomnienie na godzinę 00:${setdate.getMinutes()}`);
-            }else{
-              message.reply(`Ustawiono przypomnienie na godzinę ${setdate.getHours()+1}:${setdate.getMinutes()}`);  
-            }
+          bot.channels.get("553317566932582410").send({embed: {
+                      color: 3447003,
+                      description: ` U ${setdate.getHours()}:${setdate.getMinutes()} O${dcurentdate.getHours()}:${dcurentdate.getMinutes()}  HT ${dcurentdate.getHours() === setdate.getHours()} MT ${dcurentdate.getMinutes() === setdate.getMinutes()} S ${dcurentdate.getSeconds()}`
+                      
+          }});
+  
+        }, 10000)
+      
+        if(setdate.getHours() === 23){
+          bot.channels.get("553317566932582410").send({embed: {
+            color: 3447003,
+            description: `Ustawiono przypomnienie na godzinę 00:${setdate.getMinutes()}`}});
+        }else{
+          bot.channels.get("553317566932582410").send({embed: {
+            color: 3447003,
+            description: `Ustawiono przypomnienie na godzinę ${setdate.getHours()+1}:${setdate.getMinutes()}`}}); 
+        }
             
 
             return;
@@ -94,5 +144,20 @@ bot.on('message', message => {
     }     
 });
 
+//bot timerstop
+bot.on('message', message => {
+  if (message.content.startsWith('tbtimerstop')) {
+
+    clearInterval(timerhandle);
+    bot.channels.get("553317566932582410").send({
+      embed: {
+        color: 3447003,
+        description: `Zatrzymano przypomnienia`
+      }
+    });
+
+    return;
+  }
+});
 
 bot.login(Token);
