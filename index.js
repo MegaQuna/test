@@ -49,16 +49,17 @@ bot.on('message', message => {
 
   if (message.content.startsWith('chat')) {
 
-    const readline = require('readline').createInterface({
-      input: process.stdin,
-      output: process.stdout
-    })
-    
-    readline.question(`What's your name?`, (name) => {
-      message.channel.send(name);
-      //console.log(`Hi ${name}!`)
-      readline.close()
-    })
+    var exec = require('child_process').exec;
+    var child;
+
+   child = exec("start cmd.exe /K cd /D C:/test",
+   function (error, stdout, stderr) {
+      console.log('stdout: ' + stdout);
+      console.log('stderr: ' + stderr);
+      if (error !== null) {
+          console.log('exec error: ' + error);
+      }
+   });
 
   }
 
